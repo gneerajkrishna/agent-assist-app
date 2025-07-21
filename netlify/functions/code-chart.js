@@ -1,6 +1,9 @@
-exports.handler = async function(event, context) {
+exports.handler = async function (event, context) {
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return {
+      statusCode: 405,
+      body: 'Method Not Allowed',
+    };
   }
 
   const body = JSON.parse(event.body);
@@ -15,6 +18,8 @@ Justification: Chronic condition management.
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ codes: response })
+    headers: { 'Content-Type': 'application/json' }, // ✅ Add this line
+    body: JSON.stringify({ codes: response }),
   };
 };
+

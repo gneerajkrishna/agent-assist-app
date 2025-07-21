@@ -1,10 +1,6 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "server.js", "use": "@vercel/node" }
-  ],
-  "routes": [
+   "routes": [
     { "src": "/api/code-chart", "dest": "/server.js" },
-    { "src": "/(.*)", "dest": "/" }
+    { "src": "/", "dest": "/" }
   ]
 }

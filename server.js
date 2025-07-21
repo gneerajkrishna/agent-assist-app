@@ -1,22 +1,28 @@
-const express = require('express');
-const app = express();
-const path = require('path');
+module.exports = (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).send('Method Not Allowed');
+  }
 
-app.use(express.static(__dirname));
-app.use(express.json());
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
 
-app.post('/api/code-chart', (req, res) => {
-  const { note } = req.body;
-  const mock = `
+  req.on('end', () => {
+    try {
+      const data = JSON.parse(body);
+      const response = `
 📌 ICD-10: I10 – Hypertension
-Justification: Diagnosis mentioned in the note.
+Justification: Based on provided chart description.
 
-📌 CPT: 99214 – Office Visit
-Justification: Chronic condition with moderate complexity.
-  `;
-  res.json({ codes: mock });
-});
-
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
+📌 CPT: 99214 – Office Visit, Moderate
+Justification: Chronic condition management with medication adjustment.
+      `;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ codes: response }));
+    } catch (e) {
+      res.statusCode = 400;
+      res.end(JSON.stringify({ error: 'Invalid request format' }));
+    }
+  });
+};

@@ -2,13 +2,17 @@ const fetch = require('node-fetch');
 
 exports.handler = async function (event, context) {
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return {
+      statusCode: 405,
+      body: 'Method Not Allowed',
+    };
   }
 
-  const { note } = JSON.parse(event.body);
-  const apiKey = process.env.OPENAI_API_KEY;
+  try {
+    const { note } = JSON.parse(event.body);
+    const apiKey = process.env.OPENAI_API_KEY;
 
-  const prompt = `
+    const prompt = `
 You are a certified US medical coding assistant focused on outpatient documentation. Given a patient chart, extract:
 
 - Accurate ICD-10-CM diagnosis codes
@@ -29,7 +33,6 @@ Chart Note:
 ${note}
 `;
 
-  try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -47,7 +50,9 @@ ${note}
     });
 
     const data = await response.json();
-    const output = data.choices?.[0]?.message?.content || '⚠️ No codes returned.';
+    console.log('🔍 OpenAI raw response:', JSON.stringify(data, null, 2));
+
+    const output = data.choices?.[0]?.message?.content?.trim() || '⚠️ No codes returned.';
 
     return {
       statusCode: 200,
@@ -56,11 +61,10 @@ ${note}
     };
 
   } catch (err) {
-    console.error(err);
+    console.error('❌ OpenAI API error:', err);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Failed to contact OpenAI.' })
     };
   }
 };
-

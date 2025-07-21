@@ -1,8 +1,8 @@
 {
-  "name": "agent-assist-app",
+  "name": "agent-assist",
   "version": "1.0.0",
-  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "echo 'Use Netlify CLI or drag-and-drop to deploy.'"
   }
 }

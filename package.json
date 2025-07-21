@@ -1,8 +1,7 @@
 {
   "name": "agent-assist",
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "echo 'Use Netlify CLI or drag-and-drop to deploy.'"
+  "dependencies": {
+    "node-fetch": "^2.6.1"
   }
 }

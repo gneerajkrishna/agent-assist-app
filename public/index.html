@@ -1,27 +1,92 @@
 <!DOCTYPE html>
-<html>
-<head><title>Agent Assist</title></head>
-<body>
-  <h2>Medical Coding Assistant</h2>
-  <input type="file" id="fileInput" />
-  <br /><br />
-  <button onclick="sendChart()">Generate Codes</button>
-  <br /><br />
-  <textarea id="output" rows="10" cols="80" readonly></textarea>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Medical Coding Assistant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+  <div class="max-w-4xl mx-auto py-10 px-4">
+    <h1 class="text-2xl font-semibold mb-6 text-center">🏥 Medical Coding Assistant</h1>
+
+    <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+      <label class="block font-medium mb-2">📁 Upload Chart:</label>
+      <input type="file" id="fileInput" class="block w-full border border-gray-300 rounded px-3 py-2 mb-3" accept=".txt">
+      <p class="text-sm text-gray-500">or paste below ⬇️</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+      <label class="block font-medium mb-2">📝 Chart Note:</label>
+      <textarea id="chartText" rows="10" class="w-full border border-gray-300 rounded px-3 py-2 font-mono" placeholder="Paste or upload clinical note here..."></textarea>
+    </div>
+
+    <div class="flex gap-4 mb-6">
+      <button id="generateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">🚀 Generate Codes</button>
+      <button onclick="clearAll()" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded">🔁 Clear</button>
+    </div>
+
+    <div id="outputArea" class="hidden">
+      <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+        <h2 class="font-semibold mb-2 text-lg">📦 ICD-10-CM Codes</h2>
+        <pre id="icdOutput" class="bg-gray-100 p-4 rounded text-sm font-mono whitespace-pre-wrap"></pre>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+        <h2 class="font-semibold mb-2 text-lg">📦 CPT/HCPCS Codes</h2>
+        <pre id="cptOutput" class="bg-gray-100 p-4 rounded text-sm font-mono whitespace-pre-wrap"></pre>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-md">
+        <h2 class="font-semibold mb-2 text-lg">🧾 Billing Notes</h2>
+        <pre id="notesOutput" class="bg-gray-100 p-4 rounded text-sm font-mono whitespace-pre-wrap"></pre>
+      </div>
+
+      <div class="mt-6 text-right">
+        <button onclick="copyAll()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">📋 Copy All Codes</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    async function sendChart() {
-      const file = document.getElementById('fileInput').files[0];
-      const text = await file.text();
+    const fileInput = document.getElementById('fileInput');
+    const chartText = document.getElementById('chartText');
+    const outputArea = document.getElementById('outputArea');
+    const icdOutput = document.getElementById('icdOutput');
+    const cptOutput = document.getElementById('cptOutput');
+    const notesOutput = document.getElementById('notesOutput');
 
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const text = await file.text();
+      chartText.value = text;
+    });
+
+    document.getElementById('generateBtn').addEventListener('click', async () => {
+      const note = chartText.value.trim();
+      if (!note) return alert('Please upload or paste a chart note.');
       const res = await fetch('/.netlify/functions/code-chart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ note: text })
+        body: JSON.stringify({ note })
       });
-
       const data = await res.json();
-      document.getElementById('output').value = data.codes;
+
+      const [icdPart, cptPart, notesPart] = data.codes.split(/(?=📦 CPT|📌 CPT|📋 Billing|🧾 Billing)/);
+      icdOutput.textContent = icdPart || 'None';
+      cptOutput.textContent = cptPart || 'None';
+      notesOutput.textContent = notesPart || 'None';
+      outputArea.classList.remove('hidden');
+    });
+
+    function clearAll() {
+      chartText.value = '';
+      outputArea.classList.add('hidden');
+    }
+
+    function copyAll() {
+      const content = `${icdOutput.textContent}\n\n${cptOutput.textContent}\n\n${notesOutput.textContent}`;
+      navigator.clipboard.writeText(content).then(() => alert('Codes copied to clipboard'));
     }
   </script>
 </body>

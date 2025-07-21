@@ -14,7 +14,7 @@
       const file = document.getElementById('fileInput').files[0];
       const text = await file.text();
 
-      const res = await fetch('/api/code-chart', {
+      const res = await fetch('/.netlify/functions/code-chart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ note: text })

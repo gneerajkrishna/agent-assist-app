@@ -1,31 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Medical Coding Assistant</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans">
-  <div class="max-w-4xl mx-auto py-10 px-4">
-    <h1 class="text-2xl font-semibold mb-6 text-center">🏥 Medical Coding Assistant</h1>
-      <p class="text-center text-sm text-gray-500 mb-6">by Neeraj Krishna</p>
+<body class="bg-slate-50 text-slate-800">
 
+  <!-- Navigation -->
+  <nav class="bg-white shadow sticky top-0 z-10 p-4">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <span class="font-bold text-blue-700 text-lg">MedCode AI</span>
+      <a href="mailto:neerajkrishna.g@bain.com" class="text-sm text-blue-600 hover:underline">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md rounded-xl mb-8 p-6 text-center">
+      <h1 class="text-4xl font-bold text-blue-800 mb-2 flex justify-center items-center gap-2">
+        🏥 <span>Medical Coding Assistant</span>
+      </h1>
+      <p class="text-sm text-gray-600">Created by <span class="font-semibold">Neeraj Krishna</span></p>
+    </header>
+
+    <!-- Upload -->
     <div class="bg-white p-6 rounded-xl shadow-md mb-6">
       <label class="block font-medium mb-2">📁 Upload Chart:</label>
       <input type="file" id="fileInput" class="block w-full border border-gray-300 rounded px-3 py-2 mb-3" accept=".txt">
       <p class="text-sm text-gray-500">or paste below ⬇️</p>
     </div>
 
+    <!-- Chart Note -->
     <div class="bg-white p-6 rounded-xl shadow-md mb-6">
       <label class="block font-medium mb-2">📝 Chart Note:</label>
       <textarea id="chartText" rows="10" class="w-full border border-gray-300 rounded px-3 py-2 font-mono" placeholder="Paste or upload clinical note here..."></textarea>
     </div>
 
-    <div class="flex gap-4 mb-6">
-      <button id="generateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">🚀 Generate Codes</button>
-      <button onclick="clearAll()" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded">🔁 Clear</button>
+    <!-- Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-6">
+      <button id="generateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded w-full sm:w-auto">
+        🚀 Generate Codes
+      </button>
+      <button onclick="clearAll()" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded w-full sm:w-auto">
+        🔁 Clear
+      </button>
     </div>
 
+    <!-- Output -->
     <div id="outputArea" class="hidden">
       <div class="bg-white p-6 rounded-xl shadow-md mb-6">
         <h2 class="font-semibold mb-2 text-lg">📦 ICD-10-CM Codes</h2>
@@ -43,11 +73,19 @@
       </div>
 
       <div class="mt-6 text-right">
-        <button onclick="copyAll()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">📋 Copy All Codes</button>
+        <button onclick="copyAll()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">
+          📋 Copy All Codes
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer class="text-center text-gray-400 text-sm mt-10 mb-4">
+    © 2025 Neeraj Krishna. All rights reserved.
+  </footer>
+
+  <!-- Script -->
   <script>
     const fileInput = document.getElementById('fileInput');
     const chartText = document.getElementById('chartText');

@@ -4,11 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Medical Coding Assistant</title>
-  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" href="favicon.png" type="image/png" />
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Pacifico&display=swap" rel="stylesheet" />
   <style>
     body { font-family: 'Inter', sans-serif; }
+    .cursive { font-family: 'Pacifico', cursive; }
+    .logo { letter-spacing: 0.05em; font-weight: 800; }
+    .icon { width: 1.5rem; height: 1.5rem; display: inline-block; vertical-align: middle; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -16,7 +20,7 @@
   <!-- Navigation -->
   <nav class="bg-white shadow sticky top-0 z-10 p-4">
     <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <span class="font-bold text-blue-700 text-lg">MedCode AI</span>
+      <span class="text-2xl logo text-blue-700">MedCode<span class="text-gray-800">AI</span></span>
       <a href="mailto:neerajkrishna.g@bain.com" class="text-sm text-blue-600 hover:underline">Contact</a>
     </div>
   </nav>
@@ -27,54 +31,91 @@
     <!-- Header -->
     <header class="bg-white shadow-md rounded-xl mb-8 p-6 text-center">
       <h1 class="text-4xl font-bold text-blue-800 mb-2 flex justify-center items-center gap-2">
-        🏥 <span>Medical Coding Assistant</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l.634 1.937a1 1 0 00.95.69h2.033c.969 0 1.371 1.24.588 1.81l-1.645 1.195a1 1 0 00-.364 1.118l.634 1.937c.3.921-.755 1.688-1.54 1.118L12 10.347l-1.645 1.195c-.784.57-1.838-.197-1.54-1.118l.634-1.937a1 1 0 00-.364-1.118L7.44 7.364c-.783-.57-.38-1.81.588-1.81h2.033a1 1 0 00.95-.69l.634-1.937z"/>
+        </svg>
+        <span>Medical Coding Assistant</span>
       </h1>
-      <p class="text-sm text-gray-600">Created by <span class="font-semibold">Neeraj Krishna</span></p>
+      <p class="text-sm text-gray-600 cursive">Created by Neeraj Krishna</p>
     </header>
 
-    <!-- Upload -->
+    <!-- Upload Section -->
     <div class="bg-white p-6 rounded-xl shadow-md mb-6">
-      <label class="block font-medium mb-2">📁 Upload Chart:</label>
+      <label class="block font-medium mb-2 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Upload Chart
+      </label>
       <input type="file" id="fileInput" class="block w-full border border-gray-300 rounded px-3 py-2 mb-3" accept=".txt">
       <p class="text-sm text-gray-500">or paste below ⬇️</p>
     </div>
 
     <!-- Chart Note -->
     <div class="bg-white p-6 rounded-xl shadow-md mb-6">
-      <label class="block font-medium mb-2">📝 Chart Note:</label>
+      <label class="block font-medium mb-2 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V9l-5-4H11z" />
+        </svg>
+        Chart Note
+      </label>
       <textarea id="chartText" rows="10" class="w-full border border-gray-300 rounded px-3 py-2 font-mono" placeholder="Paste or upload clinical note here..."></textarea>
     </div>
 
     <!-- Buttons -->
     <div class="flex flex-col sm:flex-row gap-4 mb-6">
-      <button id="generateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded w-full sm:w-auto">
-        🚀 Generate Codes
+      <button id="generateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded w-full sm:w-auto flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Generate Codes
       </button>
-      <button onclick="clearAll()" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded w-full sm:w-auto">
-        🔁 Clear
+      <button onclick="clearAll()" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded w-full sm:w-auto flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V4H4z"/>
+        </svg>
+        Clear
       </button>
     </div>
 
     <!-- Output -->
     <div id="outputArea" class="hidden">
       <div class="bg-white p-6 rounded-xl shadow-md mb-6">
-        <h2 class="font-semibold mb-2 text-lg">📦 ICD-10-CM Codes</h2>
+        <h2 class="font-semibold mb-2 text-lg flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h6v6m-3-8a3 3 0 110-6 3 3 0 010 6z" />
+          </svg>
+          ICD-10-CM Codes
+        </h2>
         <pre id="icdOutput" class="bg-gray-100 p-4 rounded text-sm font-mono whitespace-pre-wrap"></pre>
       </div>
 
       <div class="bg-white p-6 rounded-xl shadow-md mb-6">
-        <h2 class="font-semibold mb-2 text-lg">📦 CPT/HCPCS Codes</h2>
+        <h2 class="font-semibold mb-2 text-lg flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h6v6m-3-8a3 3 0 110-6 3 3 0 010 6z" />
+          </svg>
+          CPT/HCPCS Codes
+        </h2>
         <pre id="cptOutput" class="bg-gray-100 p-4 rounded text-sm font-mono whitespace-pre-wrap"></pre>
       </div>
 
       <div class="bg-white p-6 rounded-xl shadow-md">
-        <h2 class="font-semibold mb-2 text-lg">🧾 Billing Notes</h2>
+        <h2 class="font-semibold mb-2 text-lg flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h8M8 12h8m-8-4h8M4 6h16v12H4z" />
+          </svg>
+          Billing Notes
+        </h2>
         <pre id="notesOutput" class="bg-gray-100 p-4 rounded text-sm font-mono whitespace-pre-wrap"></pre>
       </div>
 
       <div class="mt-6 text-right">
-        <button onclick="copyAll()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">
-          📋 Copy All Codes
+        <button onclick="copyAll()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h8M8 12h8m-8-4h8M4 6h16v12H4z" />
+          </svg>
+          Copy All Codes
         </button>
       </div>
     </div>

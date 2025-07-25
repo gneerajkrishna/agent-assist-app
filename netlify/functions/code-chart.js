@@ -53,36 +53,20 @@ Example:
 - For **In-office labs or diagnostics**: Code tests performed and interpreted in visit (e.g., rapid strep, urinalysis, EKG).
 
 6. Output Format  
-Organize output into clearly separated sections. Do not place CPT codes inside billing notes.
-
-📦 ICD-10-CM Diagnosis Codes  
-Start this section with the heading:  
-📦 ICD-10-CM Codes:
-
-Then list each ICD code like this:  
 📌 ICD-10: <code> – <description>  
-Justification: ...
+Justification: …
 
-📦 CPT/HCPCS Procedure Codes  
-Start this section with the heading:  
-📦 CPT/HCPCS Codes:
-
-Then list each CPT or HCPCS code like this:  
 📌 CPT: <code> – <description>  
-Justification: ...
+Justification: …
 
-If no procedures, diagnostics, treatments, or additional services were performed (i.e., the visit involved only a physician consultation and assessment), then output:  
-**“None”**
+📌 Modifier(s): -25, -59, etc.  
+Justification: …
 
-📦 Billing Notes  
-Start this section only if there are bundling issues, modifiers, payer alerts, or global period remarks.  
-Use this format:  
-📋 Billing Notes:
-- Short bullet points only
-- Do NOT place CPT or ICD codes here
-- If no billing notes apply, output: “None”
+📌 Billing Notes: (if needed)  
+- Explanation of bundling, modifiers, or payer policies  
+- Short and professional
 
-⚠️ If the chart lacks necessary elements (no diagnosis, plan, procedures, or symptoms), respond:  
+⚠️ If the chart lacks necessary elements (no diagnosis, plan, procedures, or symptoms), respond:
 "⚠️ Chart is insufficient for confident coding."
 
 Now process the following chart:

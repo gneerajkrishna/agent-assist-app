@@ -158,15 +158,10 @@
       });
       const data = await res.json();
 
-      const codeOutput = data.codes || "";
-
-      // Extract sections safely using regex
-      const icdMatch = codeOutput.match(/📦 ICD-10-CM Codes[\\s\\S]*?(?=📦 CPT|📋 Billing|$)/i);
-      const cptMatch = codeOutput.match(/📦 CPT\\/HCPCS Codes[\\s\\S]*?(?=📋 Billing|$)/i);
-      const notesMatch = codeOutput.match(/📋 Billing Notes[\\s\\S]*/i);
-      icdOutput.textContent = icdMatch ? icdMatch[0].trim() : "None";
-      cptOutput.textContent = cptMatch ? cptMatch[0].trim() : "None";
-      notesOutput.textContent = notesMatch ? notesMatch[0].trim() : "None";
+      const [icdPart, cptPart, notesPart] = data.codes.split(/(?=📦 CPT|📌 CPT|📋 Billing|🧾 Billing)/);
+      icdOutput.textContent = icdPart || 'None';
+      cptOutput.textContent = cptPart || 'None';
+      notesOutput.textContent = notesPart || 'None';
       outputArea.classList.remove('hidden');
     });
 

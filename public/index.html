@@ -156,18 +156,29 @@
     });
     const data = await res.json();
 
-    const codeText = data.codes || "";
+    const codeText = data.codes || '';
 
-    // Regex-based robust extraction:
-    const icdMatch = codeText.match(/📌 ICD-10[\s\S]*?(?=(📌 CPT|📦 CPT|$))/);
-    const cptMatch = codeText.match(/📌 CPT[\s\S]*?(?=(📋 Billing|🧾 Billing|$))/);
-    const billingMatch = codeText.match(/(📋 Billing Notes|🧾 Billing Notes)[\s\S]*/);
+    // Step 1: Split into ICD-10, CPT+Billing
+    const parts = codeText.split(/(?=📌 CPT|📦 CPT)/);
 
-    icdOutput.textContent = icdMatch ? icdMatch[0].trim() : 'None';
-    cptOutput.textContent = cptMatch ? cptMatch[0].trim() : 'None';
-    notesOutput.textContent = billingMatch
-      ? billingMatch[0].replace(/(📋 |🧾 )?Billing Notes:?/, "Billing Notes:").trim()
-      : 'None';
+    let icdPart = parts[0] ? parts[0].trim() : '';
+    let cptAndNotes = parts[1] ? parts[1].trim() : '';
+
+    // Step 2: Split CPT+Billing into CPT and Billing Notes
+    let cptPart = '';
+    let notesPart = '';
+
+    if (cptAndNotes) {
+      const billingSplit = cptAndNotes.split(/(?=📋 Billing Notes|🧾 Billing Notes)/);
+      cptPart = billingSplit[0] ? billingSplit[0].trim() : '';
+      notesPart = billingSplit[1]
+        ? billingSplit[1].replace(/(📋 |🧾 )?Billing Notes:?/, "Billing Notes:").trim()
+        : '';
+    }
+
+    icdOutput.textContent = icdPart || 'None';
+    cptOutput.textContent = cptPart || 'None';
+    notesOutput.textContent = notesPart || 'None';
 
     outputArea.classList.remove('hidden');
   });
@@ -182,6 +193,7 @@
     navigator.clipboard.writeText(content).then(() => alert('Codes copied to clipboard'));
   }
 </script>
+
 
 </body>
 </html>

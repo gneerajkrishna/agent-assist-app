@@ -131,53 +131,58 @@
   </footer>
 
   <!-- Script -->
-  <script>
-    const fileInput = document.getElementById('fileInput');
-    const chartText = document.getElementById('chartText');
-    const outputArea = document.getElementById('outputArea');
-    const icdOutput = document.getElementById('icdOutput');
-    const cptOutput = document.getElementById('cptOutput');
-    const notesOutput = document.getElementById('notesOutput');
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const chartText = document.getElementById('chartText');
+  const outputArea = document.getElementById('outputArea');
+  const icdOutput = document.getElementById('icdOutput');
+  const cptOutput = document.getElementById('cptOutput');
+  const notesOutput = document.getElementById('notesOutput');
 
-    fileInput.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const text = await file.text();
-      chartText.value = text;
+  fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const text = await file.text();
+    chartText.value = text;
+  });
+
+  document.getElementById('generateBtn').addEventListener('click', async () => {
+    const note = chartText.value.trim();
+    if (!note) return alert('Please upload or paste a chart note.');
+    const res = await fetch('/.netlify/functions/code-chart', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ note })
     });
+    const data = await res.json();
 
-    document.getElementById('generateBtn').addEventListener('click', async () => {
-      const note = chartText.value.trim();
-      if (!note) return alert('Please upload or paste a chart note.');
-      const res = await fetch('/.netlify/functions/code-chart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ note })
-      });
-      const data = await res.json();
-      const codeOutput = data.codes || "";
+    const codeText = data.codes || "";
 
-      const icdMatch = codeOutput.match(/📦 ICD-10-CM Codes[:\\n]*([\s\S]*?)(?=📦 CPT\/HCPCS Codes|📋 Billing Notes|$)/);
-      const cptMatch = codeOutput.match(/📦 CPT\/HCPCS Codes[:\\n]*([\s\S]*?)(?=📋 Billing Notes|$)/);
-      const notesMatch = codeOutput.match(/📋 Billing Notes[:\\n]*([\s\S]*)/);
+    // Regex-based robust extraction:
+    const icdMatch = codeText.match(/📌 ICD-10[\s\S]*?(?=(📌 CPT|📦 CPT|$))/);
+    const cptMatch = codeText.match(/📌 CPT[\s\S]*?(?=(📋 Billing|🧾 Billing|$))/);
+    const billingMatch = codeText.match(/(📋 Billing Notes|🧾 Billing Notes)[\s\S]*/);
 
-      icdOutput.textContent = icdMatch ? icdMatch[1].trim() : "None";
-      cptOutput.textContent = cptMatch ? cptMatch[1].trim() : "None";
-      notesOutput.textContent = notesMatch ? notesMatch[1].trim() : "None";
+    icdOutput.textContent = icdMatch ? icdMatch[0].trim() : 'None';
+    cptOutput.textContent = cptMatch ? cptMatch[0].trim() : 'None';
+    notesOutput.textContent = billingMatch
+      ? billingMatch[0].replace(/(📋 |🧾 )?Billing Notes:?/, "Billing Notes:").trim()
+      : 'None';
 
-      outputArea.classList.remove('hidden');
-    });
+    outputArea.classList.remove('hidden');
+  });
 
-    function clearAll() {
-      chartText.value = '';
-      outputArea.classList.add('hidden');
-    }
+  function clearAll() {
+    chartText.value = '';
+    outputArea.classList.add('hidden');
+  }
 
-    function copyAll() {
-      const content = `${icdOutput.textContent}\n\n${cptOutput.textContent}\n\n${notesOutput.textContent}`;
-      navigator.clipboard.writeText(content).then(() => alert('Codes copied to clipboard'));
-    }
-  </script>
+  function copyAll() {
+    const content = `${icdOutput.textContent}\n\n${cptOutput.textContent}\n\n${notesOutput.textContent}`;
+    navigator.clipboard.writeText(content).then(() => alert('Codes copied to clipboard'));
+  }
+</script>
+
 </body>
 </html>
 

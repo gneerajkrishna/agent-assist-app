@@ -29,8 +29,6 @@
   </div>
 </nav>
 
-
-
   <!-- Main Container -->
   <div class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
 
@@ -157,11 +155,16 @@
         body: JSON.stringify({ note })
       });
       const data = await res.json();
+      const codeOutput = data.codes || "";
 
-      const [icdPart, cptPart, notesPart] = data.codes.split(/(?=📦 CPT|📌 CPT|📋 Billing|🧾 Billing)/);
-      icdOutput.textContent = icdPart || 'None';
-      cptOutput.textContent = cptPart || 'None';
-      notesOutput.textContent = notesPart || 'None';
+      const icdMatch = codeOutput.match(/📦 ICD-10-CM Codes:\n([\s\S]*?)(?=📦 CPT\/HCPCS Codes:|📋 Billing Notes:|$)/);
+      const cptMatch = codeOutput.match(/📦 CPT\/HCPCS Codes:\n([\s\S]*?)(?=📋 Billing Notes:|$)/);
+      const notesMatch = codeOutput.match(/📋 Billing Notes:\n([\s\S]*)/);
+
+      icdOutput.textContent = icdMatch ? icdMatch[1].trim() : "None";
+      cptOutput.textContent = cptMatch ? cptMatch[1].trim() : "None";
+      notesOutput.textContent = notesMatch ? notesMatch[1].trim() : "None";
+
       outputArea.classList.remove('hidden');
     });
 
@@ -177,3 +180,4 @@
   </script>
 </body>
 </html>
+
